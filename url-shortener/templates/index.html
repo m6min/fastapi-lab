@@ -83,8 +83,7 @@
           console.error("Couldn't copy: ", err);
         });
       }
-      // Enter your site url without https
-      const url = '{{ request.base_url }}{{ path }}'
+      const url = '{{ request.base_url }}'
       const getLatestLinks = () => {
         const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
         const data = localStorage.getItem('recent_links');
@@ -96,7 +95,7 @@
         el.innerHTML = '';
         
         linkList.forEach((path) => {
-          let link = `${url}/${path.slug}`;
+          let link = `${url}${path.slug}`;
           let linkHTML = `<div class="last-link"><a href="${link}" target="_blank">${link}</a><button class="copy-btn" onclick="copy(this, '${link}')">Copy</button></div>`;
           el.innerHTML += linkHTML;
         });
