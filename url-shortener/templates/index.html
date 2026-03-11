@@ -39,7 +39,7 @@
         <span class="warning"></span>
         <button type="submit">Create URL</button>
         <p class="result">
-          {% if response %} {{response}} Your short link: site.com/{{path}} {%
+          {% if response %} {{response}} Your short link: {{ request.base_url }}{{ path }} {%
           endif %}
         </p>
       </form>
@@ -84,7 +84,7 @@
         });
       }
       // Enter your site url without https
-      const url = "site.com"
+      const url = '{{ request.base_url }}{{ path }}'
       const getLatestLinks = () => {
         const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
         const data = localStorage.getItem('recent_links');
