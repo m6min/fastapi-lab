@@ -96,7 +96,7 @@
         el.innerHTML = '';
         
         linkList.forEach((path) => {
-          let link = `https://${url}/${path.slug}`;
+          let link = `${url}/${path.slug}`;
           let linkHTML = `<div class="last-link"><a href="${link}" target="_blank">${link}</a><button class="copy-btn" onclick="copy(this, '${link}')">Copy</button></div>`;
           el.innerHTML += linkHTML;
         });
