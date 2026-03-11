@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>URL Shortener</title>
+    <link rel="stylesheet" href="{{url_for('static', path='style.css')}}" />
+  </head>
+  <body>
+    <h1>URL Shortener</h1>
+    <div class="bubble"></div>
+    <div class="container">
+      <form action="" method="POST">
+        <p>
+          Enter a long URL to shorten it. You can also provide a custom slug for
+          your shortened URL. Note that shortened links will be passive after 3 days.
+        </p>
+        <p style="text-align: left">- Long URL</p>
+        <input
+          type="text"
+          name="long_url"
+          placeholder="Enter your actual link"
+          required
+          pattern="\S+"
+          title="Please enter a valid URL"
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <p style="text-align: left">- Path name (Optional)</p>
+        <input
+          type="text"
+          name="custom_slug"
+          placeholder="Custom slug (3-15 characters)"
+          autocomplete="off"
+          spellcheck="false"
+          pattern="[a-zA-Z_.]*"
+          title="Custom slug must be 3-15 characters long and can only contain letters, numbers, hyphens, and underscores"
+        />
+        <span class="warning"></span>
+        <button type="submit">Create URL</button>
+        <p class="result">
+          {% if response %} {{response}} Your short link: site.com/{{path}} {%
+          endif %}
+        </p>
+      </form>
+    </div>
+    <div class="last-links">
+      {% if path %}Your last created links: {% endif %}
+      <div class="last-link"></div>
+    </div>
+    <script>
+      // Check input field and enable/disable the submit button
+      const slug = document.querySelector('input[name="custom_slug"]');
+      const submitButton = document.querySelector('button[type="submit"]');
+
+      const warning = document.querySelector(".warning");
+
+      slug.addEventListener("input", () => {
+        const length = slug.value.length;
+        if (length === 0) {
+          warning.textContent = "";
+          submitButton.disabled = false;
+          return;
+        }
+        if (length < 3 || length > 15) {
+          submitButton.disabled = true;
+          warning.textContent = "Custom slug must be 3-15 characters long.";
+        }
+        else {
+          warning.textContent = "";
+          submitButton.disabled = false;
+        }
+      });
+
+      let copy = (button, text) => {
+        navigator.clipboard.writeText(text).then(() => {
+          const oldText = button.innerText;
+          button.innerText = 'Link is copied';
+          setTimeout(() => {
+            button.innerText = oldText;
+        }, 2000);
+        }).catch(err => {
+          console.error("Couldn't copy: ", err);
+        });
+      }
+      // Enter your site url without https
+      const url = "site.com"
+      const getLatestLinks = () => {
+        const THREE_DAYS = 3 * 24 * 60 * 60 * 1000;
+        const data = localStorage.getItem('recent_links');
+        // Get empty list if there is no link:
+        let linkList = data ? JSON.parse(data) : [];
+        const el = document.querySelector('.last-links');
+        linkList = linkList.filter(x => (Date.now() - x.time) < THREE_DAYS);
+        localStorage.setItem('recent_links', JSON.stringify(linkList));
+        el.innerHTML = '';
+        
+        linkList.forEach((path) => {
+          let link = `https://${url}/${path.slug}`;
+          let linkHTML = `<div class="last-link"><a href="${link}" target="_blank">${link}</a><button class="copy-btn" onclick="copy(this, '${link}')">Copy</button></div>`;
+          el.innerHTML += linkHTML;
+        });
+      }
+      {% if path %}
+      // Get the path from Python
+      const newSlug = '{{path}}';
+      let newReg = {
+        slug: newSlug,
+        time: Date.now()
+      };
+      const data = localStorage.getItem('recent_links');
+      let linkList = data ? JSON.parse(data) : [];
+      const isExist = linkList.some(i => i.slug === newSlug);
+      if(!isExist){
+        // Adding path to list
+        linkList.unshift(newReg);
+        if (linkList.length > 3){
+          linkList.pop();
+        }
+        localStorage.setItem('recent_links', JSON.stringify(linkList));
+      }
+      {% endif %}
+      getLatestLinks();
+    </script>
+  </body>
+</html>

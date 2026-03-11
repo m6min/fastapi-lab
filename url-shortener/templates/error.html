@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error | {{ status_code }}</title>
+    <link rel="stylesheet" href="{{url_for('static', path='style.css')}}">
+</head>
+<body>
+    <h1>URL Shortener</h1>
+    <div class="bubble"></div>
+    <div class="container">
+        <h6 class="error-code">{{ status_code }}</h6>
+        <p style="margin: 15px auto 15px auto;">Oops! {{ error_message }}.</p>
+        <a class="back-link" href="{{ url_for('read_root') }}">Go back to Home</a>
+    </div>
+</body>
+</html>
