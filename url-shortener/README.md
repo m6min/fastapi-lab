@@ -6,19 +6,19 @@ A lightweight URL shortening service built with **FastAPI** and **SQLAlchemy**. 
 
 ## Tech Stack
 
-- **FastAPI** — async-ready web framework with automatic OpenAPI docs
+- **FastAPI** — async-ready web framework
 - **SQLAlchemy** — ORM for database interactions
 - **Jinja2** — server-side HTML templating
 - **SQLite** (default) / **PostgreSQL** (production-ready via `DATABASE_URL`)
 
 ## Features
 
-- 🔀 Auto-generates a random 6-character alphanumeric slug
-- ✏️ Optional custom slugs (3–15 chars, no spaces)
-- ♻️ Duplicate URL detection — returns existing short link instead of creating a new one
-- ⏳ Links expire after **3 days** and return `410 Gone`
-- 🧹 `/admin/cleanup` endpoint to manually purge stale links from the DB
-- 🛑 Custom error pages for `4xx`/`5xx` responses
+- Auto-generates a random 6-character alphanumeric slug
+- Optional custom slugs (3–15 chars, no spaces)
+-  Duplicate URL detection — returns existing short link instead of creating a new one
+-  Links expire after **3 days** and return `410 Gone`
+-  `/admin/cleanup` endpoint to manually purge stale links from the DB
+-  Custom error pages for `4xx`/`5xx` responses
 
 ## Project Structure
 
@@ -47,6 +47,7 @@ uvicorn app:app --reload
 
 App will be available at `http://localhost:8000`.
 
+NOTE: You need to set an .env file
 ## Environment Variables
 
 | Variable | Default | Description |
