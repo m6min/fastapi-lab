@@ -1,4 +1,4 @@
-# 🔗 URL Shortener
+# URL Shortener
 
 A lightweight URL shortening service built with **FastAPI** and **SQLAlchemy**. Supports both auto-generated and custom slugs, with built-in link expiration after 3 days.
 
