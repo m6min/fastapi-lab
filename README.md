@@ -1,5 +1,5 @@
 # FastAPI Projects
-Small FastAPI projects im coding for learning purposes.
+Small FastAPI projects that im coding for getting better on it.
 
 ## 1- URL Shortener
 
