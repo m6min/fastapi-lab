@@ -10,10 +10,10 @@ if DATABASE_URL.startswith("postgres://"):
 
 if DATABASE_URL.startswith("sqlite"):
     engine = create_engine(
-        DATABASE_URL, connect_args={"check_same_thread": False}, echo=True
+        DATABASE_URL, connect_args={"check_same_thread": False}, echo=False
     )
 else:
-    engine = create_engine(DATABASE_URL, echo=True)
+    engine = create_engine(DATABASE_URL, echo=False)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
