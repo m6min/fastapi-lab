@@ -2,7 +2,9 @@
 import random
 from datetime import datetime, timedelta
 from typing import Annotated
-
+import asyncio
+import httpx
+from contextlib import asynccontextmanager
 from fastapi import Depends, FastAPI, Form, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import RedirectResponse
@@ -15,11 +17,24 @@ import models
 from database import SessionLocal, engine
 
 models.Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    asyncio.create_task(self_ping())
+    yield
 
 app = FastAPI()
 templates = Jinja2Templates(directory='templates')
 app.mount('/static', StaticFiles(directory='static'), name='static')
 
+async def self_ping():
+    await asyncio.sleep(10)
+    async with httpx.AsyncClient() as client:
+        while True:
+            try:
+                await client.get("https://smaller.onrender.com/ping")
+            except Exception as e:
+                print(f"Self-ping failed: {e}")
+            await asyncio.sleep(600)
 def get_db():
     db = SessionLocal()
     try:
