@@ -94,6 +94,10 @@ def clean_older_links(db: Session = Depends(get_db)):
         print(f'There is an error occurred: {e}')
         raise HTTPException(status_code=500, detail=f'An error occurred during database cleanup.{e}') from e
 
+@app.get("/ping", tags=["Health Check"])
+async def ping():
+    return {"status": "alive", "message": "Hey!"}
+
 @app.get('/{get_slug}')
 def redirect(get_slug: str, db: Session = Depends(get_db)):
     founded_query = db.query(models.Link).filter(models.Link.slug == get_slug).first()
