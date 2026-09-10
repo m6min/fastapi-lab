@@ -16,25 +16,38 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 import models
 from database import SessionLocal, engine
 
-models.Base.metadata.create_all(bind=engine)
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    asyncio.create_task(self_ping())
-    yield
-
-app = FastAPI()
-templates = Jinja2Templates(directory='templates')
-app.mount('/static', StaticFiles(directory='static'), name='static')
-
 async def self_ping():
     await asyncio.sleep(10)
+
     async with httpx.AsyncClient() as client:
         while True:
             try:
-                await client.get("https://smaller.onrender.com/ping")
+                response = await client.get(
+                    "https://smaller.onrender.com/ping",
+                    timeout=10
+                )
+                print("Self-ping:", response.status_code)
             except Exception as e:
-                print(f"Self-ping failed: {e}")
+                print("Self-ping failed:", repr(e))
+
             await asyncio.sleep(600)
+
+
+models.Base.metadata.create_all(bind=engine)
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    task = asyncio.create_task(self_ping())
+    try:
+        yield
+    finally:
+        task.cancel()
+
+
+app = FastAPI(lifespan=lifespan)
+templates = Jinja2Templates(directory='templates')
+app.mount('/static', StaticFiles(directory='static'), name='static')
+
+
 def get_db():
     db = SessionLocal()
     try:
