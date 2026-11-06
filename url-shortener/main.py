@@ -23,7 +23,7 @@ async def self_ping():
         while True:
             try:
                 response = await client.get(
-                    "https://smaller.onrender.com/ping",
+                    "https://shorter.onrender.com/ping",
                     timeout=10
                 )
                 print("Self-ping:", response.status_code)
