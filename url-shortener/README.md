@@ -2,7 +2,7 @@
 
 A lightweight URL shortening service built with **FastAPI** and **SQLAlchemy**. Supports both auto-generated and custom slugs, with built-in link expiration after 3 days.
 
-[Try the live demo](https://shorter.onrender.com). The demo may take some time to wake up or be unavailable due to free-tier limits.
+[Try the live demo](https://shorter-qhb0.onrender.com/). The demo may take some time to wake up or be unavailable due to free-tier limits.
 
 ## Tech Stack
 
@@ -93,4 +93,4 @@ Keep the web service and database in the same region. Local SQLite data on Rende
 - Slug uniqueness is enforced at the database level (`unique=True`)
 - Expired links are lazily deleted on access, or bulk-removed via `/admin/cleanup`
 - This is a learning/demo project with no authentication or rate limiting; `/admin/cleanup` is publicly accessible.
-- The background self-ping targets `https://shorter.onrender.com/ping`. It does not guarantee that a free service stays awake.
+- The background self-ping targets `https://shorter-qhb0.onrender.com/ping`. It does not guarantee that a free service stays awake.
